@@ -16,3 +16,6 @@
 
 
 
+-> don't forget to set withCredentials to true, otherwise cookies won't be sent in the request and
+-> you won't get the feed data
+       { withCredentials: true }
