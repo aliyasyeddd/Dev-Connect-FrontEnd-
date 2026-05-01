@@ -1,12 +1,30 @@
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { addRequests } from "../utils/requestSlice";
+import { addRequests, removeRequest } from "../utils/requestSlice";
 import { useEffect } from "react";
 
 const Requests = () => {
   const requests = useSelector((store) => store.requests);
   const dispatch = useDispatch();
+
+
+ const reviewRequest = async (status, _id) => {
+    try {
+      //in POST call we don't need to send any data in body, just the status and id in url is enough
+      const res = axios.post(
+        BASE_URL + "/request/review/" + status + "/" + _id,
+        {},
+        { withCredentials: true }
+      );
+      // After successfully accepting/rejecting the request, we can remove it from the UI by 
+      // dispatching the removeRequest action with the request's _id
+      dispatch(removeRequest(_id));
+    } catch (err) {
+      // Handle Error Case
+      console.log(err);
+    }
+  };
 
   const fetchRequests = async () => {
     try {
@@ -16,8 +34,8 @@ const Requests = () => {
 
       dispatch(addRequests(res.data.data));
     } catch (err) {
-        // Handle Error Case
-        console.log(err);
+      // Handle Error Case
+      console.log(err);
     }
   };
 
@@ -40,8 +58,15 @@ const Requests = () => {
       <h1 className="text-bold text-white text-3xl">Connection Requests</h1>
 
       {requests.map((request) => {
-        const { _id, firstName, lastName, photoURL: photoUrl, age, gender, about } =
-          request.fromUserId;
+        const {
+          _id,
+          firstName,
+          lastName,
+          photoURL: photoUrl,
+          age,
+          gender,
+          about,
+        } = request.fromUserId;
 
         return (
           <div
@@ -63,8 +88,18 @@ const Requests = () => {
               <p>{about}</p>
             </div>
             <div>
-              <button className="btn btn-primary mx-2">Reject</button>
-              <button className="btn btn-secondary mx-2">Accept</button>
+              <button
+                className="btn btn-primary mx-2"
+                onClick={() => reviewRequest("rejected", request._id)}
+              >
+                Reject
+              </button>
+              <button
+                className="btn btn-secondary mx-2"
+                onClick={() => reviewRequest("accepted", request._id)}
+              >
+                Accept
+              </button>
             </div>
           </div>
         );
