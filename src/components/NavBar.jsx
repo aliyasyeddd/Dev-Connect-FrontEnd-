@@ -2,7 +2,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
-import { removeUser} from "../utils/userSlice"
+import { removeUser } from "../utils/userSlice";
 
 const NavBar = () => {
   //get user from redux store
@@ -17,7 +17,7 @@ const NavBar = () => {
       return navigate("/login");
     } catch (err) {
       // Error logic maybe redirect to error page
-      console.log(err)
+      console.log(err);
     }
   };
 
@@ -53,6 +53,9 @@ const NavBar = () => {
               </li>
               <li>
                 <Link to="/connections">Connections</Link>
+              </li>
+              <li>
+                <Link to="/requests">Requests</Link>
               </li>
               <li>
                 <a onClick={handleLogout}>Logout</a>
