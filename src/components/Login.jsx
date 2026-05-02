@@ -41,8 +41,11 @@ const Login = () => {
         { firstName, lastName, emailId, password },
         { withCredentials: true },
       );
+      //add user to redux store
       const user = res?.data?.data || res?.data;
       dispatch(addUser(user));
+      //navigate to profile page after successful signup
+      //not adding navigate hook to the profile after signup is enough we must update in backend api
       navigate("/profile");
     } catch (err) {
       setError(err?.response?.data || "Something went wrong");
